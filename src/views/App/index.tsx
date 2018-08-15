@@ -1,20 +1,25 @@
 import * as React from 'react';
 import {
   Route,
+  Switch,
 } from 'react-router-dom'
-
-const Comp = () => <div>Hello!</div>
+import Answers from '../Answers';
+import Questions from '../Questions';
 
 class App extends React.Component {
   public render() {
     return (
-      <div>
+      <Switch>
         <Route
           exact={true}
           path="/"
-          component={Comp}
+          component={Questions}
         />
-      </div>
+        <Route
+          path="/answers"
+          component={Answers}
+        />
+      </Switch>
     );
   }
 }

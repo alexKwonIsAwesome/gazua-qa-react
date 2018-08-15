@@ -2,7 +2,7 @@
   "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
   "rules": {
     "no-unused-expression": false,
-    "import-sources-order": false,
+    "import-sources-order": false
   },
   "linterOptions": {
     "exclude": [
