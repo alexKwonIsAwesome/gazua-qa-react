@@ -3,10 +3,10 @@ import * as ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
 } from 'react-router-dom'
+import 'antd/dist/antd.css';
 import './global-styles';
 import registerServiceWorker from './registerServiceWorker';
 import App from './views/App';
-
 
 ReactDOM.render(
   <Router>
