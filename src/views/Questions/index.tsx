@@ -8,19 +8,19 @@ import Container from '../../components/Container';
 import QuestionPanel from '../../components/QuestionPanel';
 import QuestionEditor from '../../components/QuestionEditor';
 
-import { QUESTIONS } from './queries';
+import { GET_QUESTIONS } from './queries';
 
 class Questions extends React.Component {
   public renderQuestions() {
     return (
-      <Query query={QUESTIONS}>
+      <Query query={GET_QUESTIONS}>
         {
           ({ error, loading, data }) => {
             if (error) { return null };
             if (loading) { return null };
             const { questions } = data;
             return questions.map((item) => {
-              const { id, question, contents } = item;
+              const { id, question, contents, answerLength } = item;
               return (
                 <QuestionPanel
                   key={id}
@@ -29,7 +29,7 @@ class Questions extends React.Component {
                   username={'Example'}
                   date={new Date()}
                   contents={contents}
-                  repliesLength={3}
+                  answerLength={answerLength}
                 />
               )
             })

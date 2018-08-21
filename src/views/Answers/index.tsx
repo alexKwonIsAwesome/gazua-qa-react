@@ -15,7 +15,7 @@ class Answers extends React.Component {
         username: '가즈아',
         date: new Date(),
         contents: '비트코인 다시 상승하는 모습 보여주네요 ㅋㅋ 다양한 정보 많이 찾아보시면서 실시간 대응하셔도 좋을듯 제가 공부해보니까 알트는 함부로 가지고 있는다고 답은 아니더라고요',
-        repliesLength: 0
+        answerLength: 0
       },
       {
         id: '2',
@@ -23,7 +23,7 @@ class Answers extends React.Component {
         username: '가즈아',
         date: new Date(),
         contents: '비트코인 다시 상승하는 모습 보여주네요 ㅋㅋ 다양한 정보 많이 찾아보시면서 실시간 대응하셔도 좋을듯 제가 공부해보니까 알트는 함부로 가지고 있는다고 답은 아니더라고요',
-        repliesLength: 0
+        answerLength: 0
       },
       {
         id: '3',
@@ -31,13 +31,13 @@ class Answers extends React.Component {
         username: '가즈아',
         date: new Date(),
         contents: '비트코인 다시 상승하는 모습 보여주네요 ㅋㅋ 다양한 정보 많이 찾아보시면서 실시간 대응하셔도 좋을듯 제가 공부해보니까 알트는 함부로 가지고 있는다고 답은 아니더라고요',
-        repliesLength: 0
+        answerLength: 0
       }
     ];
     return (
       <>
         {questions.map((item) => {
-          const { id, question, username, date, contents, repliesLength } = item;
+          const { id, question, username, date, contents, answerLength } = item;
           return (
             <QuestionPanel
               key={id}
@@ -46,7 +46,7 @@ class Answers extends React.Component {
               username={username}
               date={date}
               contents={contents}
-              repliesLength={repliesLength}
+              answerLength={answerLength}
             />
           );
         })}

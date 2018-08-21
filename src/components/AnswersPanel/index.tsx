@@ -1,25 +1,26 @@
 import * as React from 'react';
 import styled from '../../styled-components';
 
-interface ICommentsPanel {
-  comments?: Array<{
+interface IAnswersPanel {
+  answers?: Array<{
     id: string;
     username: string;
     date: Date;
-    content: string;
+    contents: string;
   }>
+  answerLength: number;
 };
 
-class CommentsPanel extends React.Component<ICommentsPanel> {
+class AnswersPanel extends React.Component<IAnswersPanel> {
   public render() {
-    const { comments } = this.props;
+    const { answers, answerLength } = this.props;
 
-    if (comments && comments.length !==0) {
+    if (answers && answers.length !==0) {
       return (
         <Wrapper>
-          <Guide>10개의 답변</Guide>
-          {comments.map((item) => {
-            const { id, username, date, content } = item;
+          <Guide>{answerLength}개의 답변</Guide>
+          {answers.map((item) => {
+            const { id, username, date, contents } = item;
             return (
               <Comment key={id}>
                 <Top>
@@ -27,7 +28,7 @@ class CommentsPanel extends React.Component<ICommentsPanel> {
                   <Date>{date.toLocaleString()}</Date>
                 </Top>
                 <Content>
-                  {content}
+                  {contents}
                 </Content>
               </Comment>
             );
@@ -88,4 +89,4 @@ const Content = styled.div`
   color: #333;
 `;
 
-export default CommentsPanel;
+export default AnswersPanel;

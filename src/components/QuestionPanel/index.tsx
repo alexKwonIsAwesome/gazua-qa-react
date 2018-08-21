@@ -8,21 +8,31 @@ interface IQuestion {
   username: string;
   date: Date;
   contents: string;
-  repliesLength?: number;
+  answerLength?: number;
+  unclickable?: boolean;
 };
 
-const QuestionPanel: React.SFC<IQuestion> = ({ id, question, username, date, contents, repliesLength }) => {
-  return (
-    <Wrapper>
-      <Link to={`/question/${id}`}>
+const QuestionPanel: React.SFC<IQuestion> = ({ id, question, username, date, contents, answerLength, unclickable }) => {
+  const Children = () => {
+    return (
+      <>
         <Question>Q: {question}</Question>
         <User>{username}</User>
         <Date>{date.toLocaleString()}</Date>
         <Contents>{contents}</Contents>
-        {repliesLength !== undefined ? (
-          <Reply>답변 {repliesLength}개</Reply>
+        {answerLength !== undefined ? (
+          <Reply>답변 {answerLength}개</Reply>
         ) : null}
-      </Link>
+      </>
+    );
+  }
+  return (
+    <Wrapper>
+      {
+        unclickable ?
+        <Container><Children /></Container> :
+        <StyledLink to={`/question/${id}`}><Children /></StyledLink>
+      }
     </Wrapper>
   )
 };
@@ -32,15 +42,18 @@ const Wrapper = styled.div`
   border-radius: 3px;
   background-color: #fff;
   line-height: 1;
-  cursor: pointer;
   user-select: none;
   margin-bottom: 1.6rem;
+`;
 
-  a {
-    display: block;
-    padding: 4rem 3rem;
-    text-decoration: none;
-  }
+const Container = styled.div`
+  padding: 4rem 3rem;
+`;
+
+const StyledLink = styled(Link)`
+  display: block;
+  padding: 4rem 3rem;
+  text-decoration: none;
 `;
 
 const Question = styled.div`
