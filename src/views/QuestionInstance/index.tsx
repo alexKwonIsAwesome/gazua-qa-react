@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from '../../styled-components';
 import { Row, Col } from 'antd';
-import { Query } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
 import { RouteComponentProps } from 'react-router';
 
 import Navbar from '../../components/Navbar';
@@ -12,10 +12,61 @@ import AnswerEditor from '../../components/AnswerEditor';
 
 import {
   GET_QUESTION,
-  GET_ANSWERS
+  GET_ANSWERS,
+  ADD_ANSWER,
 } from './queries';
 
-class QuestionInstance extends React.Component<RouteComponentProps<any>> {
+interface IState {
+  contents: string;
+}
+
+class QuestionInstance extends React.Component<RouteComponentProps<any>, IState> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      contents: ''
+    }
+  }
+
+  public handleAnswerEdit = (e) => {
+    e.preventDefault();
+    this.setState({
+      contents: e.target.value
+    });
+  }
+
+  public handleAnserSubmit = (mutate, variables) => () => {
+    const confirm = window.confirm('정말로 답변을 작성하시겠습니까?');
+    if (confirm) {
+      mutate({ variables });
+    }
+  }
+
+  public handleMutationUpdate = (cache, { data: { addAnswer }}) => {
+    const questionId = this.props.match.params.id;
+    const { question } = cache.readQuery({ query: GET_ANSWERS, variables: { id: questionId } });
+    const { answers } = question;
+    cache.writeQuery({
+      query: GET_ANSWERS,
+      variables: { id: questionId },
+      data: {
+        question: {
+          ...question,
+          answerLength: question.answerLength + 1,
+          answers: [
+            ...answers,
+            addAnswer
+          ]
+        }
+      }
+    });
+  }
+
+  public handleMutationCompleted = () => {
+    alert('답변이 성공적으로 등록되었습니다.');
+    this.setState({ contents: '' });
+  }
+
   public renderQuestion() {
     const questionId = this.props.match.params.id;
     return (
@@ -68,6 +119,29 @@ class QuestionInstance extends React.Component<RouteComponentProps<any>> {
       </Query>
     );
   }
+
+  public renderAnswerEditor() {
+    const questionId = this.props.match.params.id;
+    const { contents } = this.state;
+    return (
+      <Mutation
+        mutation={ADD_ANSWER}
+        update={this.handleMutationUpdate}
+        onCompleted={this.handleMutationCompleted}
+      >
+        {(mutate) => {
+          return (
+            <AnswerEditor
+              contents={contents}
+              onEdit={this.handleAnswerEdit}
+              onSubmit={this.handleAnserSubmit(mutate, { questionId, contents })}
+            />
+          )
+        }}
+      </Mutation>
+    )
+  }
+
   public render() {
     return (
       <Wrapper>
@@ -79,7 +153,7 @@ class QuestionInstance extends React.Component<RouteComponentProps<any>> {
               {this.renderAnswers()}
             </Col>
             <Col span={8}>
-              <AnswerEditor />
+              {this.renderAnswerEditor()}
             </Col>
           </Row>
         </Container>

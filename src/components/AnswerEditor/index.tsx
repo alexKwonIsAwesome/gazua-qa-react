@@ -1,20 +1,33 @@
 import * as React from 'react';
 import styled from '../../styled-components';
 
-class AnswerEditor extends React.Component {
-  public render() {
-    return (
-      <Wrapper>
-        <Guide>답변 작성하기</Guide>
-        <Inputs>
-          <div>답변</div>
-          <textarea />
-        </Inputs>
-        <Submit>작성하기</Submit>
-      </Wrapper>
-    );
-  }
+interface IProps {
+  contents: string;
+  onEdit: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onSubmit: () => void;
 }
+
+const AnswerEditor: React.SFC<IProps> = ({
+  contents,
+  onEdit,
+  onSubmit
+}) => {
+  return (
+    <Wrapper>
+      <Guide>답변 작성하기</Guide>
+      <Inputs>
+        <div>답변</div>
+        <textarea
+          value={contents}
+          onChange={onEdit}
+        />
+      </Inputs>
+      <Submit
+        onClick={onSubmit}
+      >작성하기</Submit>
+    </Wrapper>
+  );
+};
 
 const Wrapper = styled.div`
   border: 1px solid #eee;

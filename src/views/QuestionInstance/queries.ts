@@ -24,3 +24,13 @@ export const GET_ANSWERS = gql`
     }
   }
 `;
+
+export const ADD_ANSWER = gql`
+  mutation AddAnswer($questionId: ID!, $contents: String!) {
+    addAnswer(questionId: $questionId, contents: $contents) {
+      id
+      contents
+      questionId
+    }
+  }
+`;
