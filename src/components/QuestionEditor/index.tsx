@@ -9,15 +9,11 @@ interface IQuestionEditor {
 }
 
 const handleQuestion = (onEdit) => (e) => {
-  onEdit('question', e.target.value);
+  onEdit('question', e);
 };
 
 const handleContents = (onEdit) => (e) => {
-  onEdit('contents', e.target.value);
-}
-
-const handleSubmit = (onSubmit) => () => {
-  onSubmit();
+  onEdit('contents', e);
 }
 
 const QuestionEditor: React.SFC<IQuestionEditor> = ({
@@ -42,7 +38,7 @@ const QuestionEditor: React.SFC<IQuestionEditor> = ({
         />
       </Inputs>
       <Submit
-        onClick={handleSubmit(onSubmit)}
+        onClick={onSubmit}
       >작성하기</Submit>
     </Wrapper>
   );

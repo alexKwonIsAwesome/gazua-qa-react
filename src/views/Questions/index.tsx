@@ -27,11 +27,12 @@ class Questions extends React.Component<any, IState> {
     }
   }
 
-  public handleQuestionEdit = (type, value) => {
+  public handleQuestionEdit = (type, e) => {
+    e.preventDefault();
     // https://github.com/Microsoft/TypeScript/issues/13948
     this.setState({
       ...this.state, // due to the ts dynamic state property issue
-      [type]: value
+      [type]: e.target.value
     });
   }
 
