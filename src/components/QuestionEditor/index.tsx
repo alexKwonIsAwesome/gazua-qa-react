@@ -1,21 +1,51 @@
 import * as React from 'react';
 import styled from '../../styled-components';
 
-class QuestionEditor extends React.Component {
-  public render() {
-    return (
-      <Wrapper>
-        <Guide>질문 작성하기</Guide>
-        <Inputs>
-          <div>질문</div>
-          <input />
-          <div>설명</div>
-          <textarea />
-        </Inputs>
-        <Submit>작성하기</Submit>
-      </Wrapper>
-    );
-  }
+interface IQuestionEditor {
+  question: string;
+  contents: string;
+  onEdit: (type: string, data: string) => void;
+  onSubmit: () => void;
+}
+
+const handleQuestion = (onEdit) => (e) => {
+  onEdit('question', e.target.value);
+};
+
+const handleContents = (onEdit) => (e) => {
+  onEdit('contents', e.target.value);
+}
+
+const handleSubmit = (onSubmit) => () => {
+  onSubmit();
+}
+
+const QuestionEditor: React.SFC<IQuestionEditor> = ({
+  question,
+  contents,
+  onEdit,
+  onSubmit,
+}) => {
+  return (
+    <Wrapper>
+      <Guide>질문 작성하기</Guide>
+      <Inputs>
+        <div>질문</div>
+        <input
+          value={question}
+          onChange={handleQuestion(onEdit)}
+        />
+        <div>설명</div>
+        <textarea
+          value={contents}
+          onChange={handleContents(onEdit)}
+        />
+      </Inputs>
+      <Submit
+        onClick={handleSubmit(onSubmit)}
+      >작성하기</Submit>
+    </Wrapper>
+  );
 }
 
 const Wrapper = styled.div`
