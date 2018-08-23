@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const GET_QUESTIONS = gql`
-  query {
-    questions {
+  query getQuestions($offset: Int!, $limit: Int!) {
+    questions(offset: $offset, limit: $limit) {
       id
       question
       contents

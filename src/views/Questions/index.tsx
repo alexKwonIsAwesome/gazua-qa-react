@@ -5,6 +5,7 @@ import { Query, Mutation } from 'react-apollo';
 
 import Navbar from '../../components/Navbar';
 import Container from '../../components/Container';
+import Infinite from '../../components/Infinite';
 import QuestionPanel from '../../components/QuestionPanel';
 import QuestionEditor from '../../components/QuestionEditor';
 
@@ -16,6 +17,9 @@ import {
 interface IState {
   question: string;
   contents: string;
+  offset: number;
+  limit: number;
+  fetchedAll: boolean;
 }
 
 class Questions extends React.Component<any, IState> {
@@ -24,6 +28,9 @@ class Questions extends React.Component<any, IState> {
     this.state = {
       question: '',
       contents: '',
+      offset: 0,
+      limit: 10,
+      fetchedAll: false,
     }
   }
 
@@ -44,9 +51,14 @@ class Questions extends React.Component<any, IState> {
   }
 
   public handleMutationUpdate = (cache, { data: { addQuestion } }) => {
-    const { questions } = cache.readQuery({ query: GET_QUESTIONS });
+    const { offset, limit } = this.state;
+    const { questions } = cache.readQuery({
+      query: GET_QUESTIONS,
+      variables: { offset, limit }
+    });
     cache.writeQuery({
       query: GET_QUESTIONS,
+      variables: { offset, limit },
       data: {
         questions: [
           {
@@ -64,28 +76,60 @@ class Questions extends React.Component<any, IState> {
     this.setState({ question: '', contents: '' });
   }
 
+  public handleInfiniteLoad = (fetchMore, questions) => () => {
+    fetchMore({
+      variables: {
+        offset: questions.length
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) { return prev; }
+        if (fetchMoreResult.questions && fetchMoreResult.questions.length < 10) {
+          this.setState({ fetchedAll: true });
+        }
+        return {
+          ...prev,
+          questions: [ ...prev.questions, ...fetchMoreResult.questions ]
+        }
+      }
+    });
+  }
+
   public renderQuestions() {
+    const { offset, limit, fetchedAll } = this.state;
     return (
-      <Query query={GET_QUESTIONS}>
+      <Query
+        query={GET_QUESTIONS}
+        variables={{ offset, limit }}
+        notifyOnNetworkStatusChange={true}
+      >
         {
-          ({ error, loading, data }) => {
-            if (error) { return null };
-            if (loading) { return null };
+          ({ error, loading, data, fetchMore }) => {
             const { questions } = data;
-            return questions.map((item) => {
-              const { id, question, contents, answerLength } = item;
-              return (
-                <QuestionPanel
-                  key={id}
-                  id={id}
-                  question={question}
-                  username={'Example'}
-                  date={new Date()}
-                  contents={contents}
-                  answerLength={answerLength}
-                />
-              );
-            });
+            if (error) { return null };
+            if (loading && !Boolean(questions)) { return null };
+            return (
+              <Infinite
+                offset={0}
+                loading={loading}
+                fetchedAll={fetchedAll}
+                onLoad={this.handleInfiniteLoad(fetchMore, questions)}
+              >
+                {questions.map((item) => {
+                  const { id, question, contents, answerLength } = item;
+                  return (
+                    <QuestionPanel
+                      key={id}
+                      id={id}
+                      question={question}
+                      username={'Example'}
+                      date={new Date()}
+                      contents={contents}
+                      answerLength={answerLength}
+                    />
+                  );
+                })}
+              </Infinite>
+            );
           }
         }
       </Query>
