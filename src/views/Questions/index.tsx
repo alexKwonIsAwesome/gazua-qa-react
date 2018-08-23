@@ -115,14 +115,14 @@ class Questions extends React.Component<any, IState> {
                 onLoad={this.handleInfiniteLoad(fetchMore, questions)}
               >
                 {questions.map((item) => {
-                  const { id, question, contents, answersLength } = item;
+                  const { id, question, contents, answersLength, updatedAt } = item;
                   return (
                     <QuestionPanel
                       key={id}
                       id={id}
                       question={question}
                       username={'Example'}
-                      date={new Date()}
+                      date={updatedAt}
                       contents={contents}
                       answersLength={answersLength}
                     />

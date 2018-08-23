@@ -13,7 +13,7 @@ class Answers extends React.Component {
         id: '1',
         question: '오늘은 어떤 하루?',
         username: '가즈아',
-        date: new Date(),
+        date: '11123412341',
         contents: '비트코인 다시 상승하는 모습 보여주네요 ㅋㅋ 다양한 정보 많이 찾아보시면서 실시간 대응하셔도 좋을듯 제가 공부해보니까 알트는 함부로 가지고 있는다고 답은 아니더라고요',
         answersLength: 0
       },
@@ -21,7 +21,7 @@ class Answers extends React.Component {
         id: '2',
         question: '오늘은 어떤 하루?',
         username: '가즈아',
-        date: new Date(),
+        date: '11123412341',
         contents: '비트코인 다시 상승하는 모습 보여주네요 ㅋㅋ 다양한 정보 많이 찾아보시면서 실시간 대응하셔도 좋을듯 제가 공부해보니까 알트는 함부로 가지고 있는다고 답은 아니더라고요',
         answersLength: 0
       },
@@ -29,7 +29,7 @@ class Answers extends React.Component {
         id: '3',
         question: '오늘은 어떤 하루?',
         username: '가즈아',
-        date: new Date(),
+        date: '11123412341',
         contents: '비트코인 다시 상승하는 모습 보여주네요 ㅋㅋ 다양한 정보 많이 찾아보시면서 실시간 대응하셔도 좋을듯 제가 공부해보니까 알트는 함부로 가지고 있는다고 답은 아니더라고요',
         answersLength: 0
       }

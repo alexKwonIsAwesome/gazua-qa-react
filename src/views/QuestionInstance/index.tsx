@@ -75,13 +75,13 @@ class QuestionInstance extends React.Component<RouteComponentProps<any>, IState>
           ({ error, loading, data }) => {
             if (error) { return null };
             if (loading) { return null };
-            const { id, question, contents } = data.question;
+            const { id, question, contents, updatedAt } = data.question;
             return (
               <QuestionPanel
                 id={"1"}
                 question={question}
                 username="가즈아"
-                date={new Date()}
+                date={updatedAt}
                 contents={contents}
                 unclickable={true}
               />

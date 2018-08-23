@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import styled from '../../styled-components';
+import Timer from '../Timer';
 
 interface IQuestion {
   id: string;
   question: string;
   username: string;
-  date: Date;
+  date: string;
   contents: string;
   answersLength?: number;
   unclickable?: boolean;
@@ -18,7 +19,9 @@ const QuestionPanel: React.SFC<IQuestion> = ({ id, question, username, date, con
       <>
         <Question>Q: {question}</Question>
         <User>{username}</User>
-        <Date>{date.toLocaleString()}</Date>
+        <Date>
+          <Timer datetime={date} />
+        </Date>
         <Contents>{contents}</Contents>
         {answersLength !== undefined ? (
           <Reply>답변 {answersLength}개</Reply>

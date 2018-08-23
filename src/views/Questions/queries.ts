@@ -7,6 +7,8 @@ export const GET_QUESTIONS = gql`
       question
       contents
       answersLength
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -21,6 +23,8 @@ export const ADD_QUESTION = gql`
         id
         contents
       }
+      createdAt
+      updatedAt
     }
   }
 `;
