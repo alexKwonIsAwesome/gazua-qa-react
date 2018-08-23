@@ -8,11 +8,11 @@ interface IQuestion {
   username: string;
   date: Date;
   contents: string;
-  answerLength?: number;
+  answersLength?: number;
   unclickable?: boolean;
 };
 
-const QuestionPanel: React.SFC<IQuestion> = ({ id, question, username, date, contents, answerLength, unclickable }) => {
+const QuestionPanel: React.SFC<IQuestion> = ({ id, question, username, date, contents, answersLength, unclickable }) => {
   const Children = () => {
     return (
       <>
@@ -20,8 +20,8 @@ const QuestionPanel: React.SFC<IQuestion> = ({ id, question, username, date, con
         <User>{username}</User>
         <Date>{date.toLocaleString()}</Date>
         <Contents>{contents}</Contents>
-        {answerLength !== undefined ? (
-          <Reply>답변 {answerLength}개</Reply>
+        {answersLength !== undefined ? (
+          <Reply>답변 {answersLength}개</Reply>
         ) : null}
       </>
     );

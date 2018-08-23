@@ -6,7 +6,7 @@ export const GET_QUESTION = gql`
       id
       question
       contents
-      answerLength
+      answersLength
     }
   }
 `;
@@ -15,7 +15,7 @@ export const GET_ANSWERS = gql`
   query Question($id: ID!) {
     question(id: $id) {
       id
-      answerLength
+      answersLength
       answers {
         id
         questionId

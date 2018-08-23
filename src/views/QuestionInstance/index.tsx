@@ -52,7 +52,7 @@ class QuestionInstance extends React.Component<RouteComponentProps<any>, IState>
       data: {
         question: {
           ...question,
-          answerLength: question.answerLength + 1,
+          answersLength: question.answersLength + 1,
           answers: [
             ...answers,
             addAnswer
@@ -100,10 +100,10 @@ class QuestionInstance extends React.Component<RouteComponentProps<any>, IState>
           ({ error, loading, data }) => {
             if (error) { return null };
             if (loading) { return null };
-            const { answers, answerLength } = data.question;
+            const { answers, answersLength } = data.question;
             return (
               <AnswersPanel
-                answerLength={answerLength}
+                answersLength={answersLength}
                 answers={answers.map(({ id, contents }) => {
                   return {
                     id,

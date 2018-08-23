@@ -63,7 +63,7 @@ class Questions extends React.Component<any, IState> {
         questions: [
           {
             ...addQuestion,
-            answerLength: addQuestion.answers.length
+            answersLength: addQuestion.answers.length
           },
           ...questions,
         ]
@@ -115,7 +115,7 @@ class Questions extends React.Component<any, IState> {
                 onLoad={this.handleInfiniteLoad(fetchMore, questions)}
               >
                 {questions.map((item) => {
-                  const { id, question, contents, answerLength } = item;
+                  const { id, question, contents, answersLength } = item;
                   return (
                     <QuestionPanel
                       key={id}
@@ -124,7 +124,7 @@ class Questions extends React.Component<any, IState> {
                       username={'Example'}
                       date={new Date()}
                       contents={contents}
-                      answerLength={answerLength}
+                      answersLength={answersLength}
                     />
                   );
                 })}

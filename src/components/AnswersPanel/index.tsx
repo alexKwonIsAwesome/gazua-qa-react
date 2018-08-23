@@ -8,17 +8,17 @@ interface IAnswersPanel {
     date: Date;
     contents: string;
   }>
-  answerLength: number;
+  answersLength: number;
 };
 
 class AnswersPanel extends React.Component<IAnswersPanel> {
   public render() {
-    const { answers, answerLength } = this.props;
+    const { answers, answersLength } = this.props;
 
     if (answers && answers.length !==0) {
       return (
         <Wrapper>
-          <Guide>{answerLength}개의 답변</Guide>
+          <Guide>{answersLength}개의 답변</Guide>
           {answers.map((item) => {
             const { id, username, date, contents } = item;
             return (

@@ -6,7 +6,7 @@ export const GET_QUESTIONS = gql`
       id
       question
       contents
-      answerLength
+      answersLength
     }
   }
 `;
