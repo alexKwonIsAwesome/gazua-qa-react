@@ -14,6 +14,10 @@ import {
   ADD_QUESTION,
 } from './queries';
 
+import {
+  GET_QUESTIONS as GET_QUESTIONS_BY_ANSWERS
+} from '../Answers/queries';
+
 interface IState {
   question: string;
   contents: string;
@@ -50,31 +54,21 @@ class Questions extends React.Component<any, IState> {
     }
   }
 
-  public handleMutationUpdate = (cache, { data: { addQuestion } }) => {
-    const { offset, limit } = this.state;
-    const { questions } = cache.readQuery({
-      query: GET_QUESTIONS,
-      variables: { offset, limit }
-    });
-    cache.writeQuery({
-      query: GET_QUESTIONS,
-      variables: { offset, limit },
-      data: {
-        questions: [
-          {
-            ...addQuestion,
-            answersLength: addQuestion.answers.length
-          },
-          ...questions,
-        ]
-      }
-    });
-  }
-
   public handleMutationCompleted = () => {
     alert('질문이 성공적으로 등록되었습니다.');
     this.setState({ question: '', contents: '' });
   }
+
+  public handleMutationRefetchQueries = () => [
+    {
+      query: GET_QUESTIONS,
+      variables: { offset: 0, limit: 10 }
+    },
+    {
+      query: GET_QUESTIONS_BY_ANSWERS,
+      variables: { offset: 0, limit: 10, answers: 'none' }
+    }
+  ]
 
   public handleInfiniteLoad = (fetchMore, questions) => () => {
     fetchMore({
@@ -141,8 +135,8 @@ class Questions extends React.Component<any, IState> {
     return (
       <Mutation
         mutation={ADD_QUESTION}
-        update={this.handleMutationUpdate}
         onCompleted={this.handleMutationCompleted}
+        refetchQueries={this.handleMutationRefetchQueries}
       >
         {(mutate) => {
           return (

@@ -15,6 +15,8 @@ import {
   GET_ANSWERS,
   ADD_ANSWER,
 } from './queries';
+import { GET_QUESTIONS as GET_QUESTION_BY_QUESTIONS } from '../Questions/queries';
+import { GET_QUESTIONS as GET_QUESTION_BY_ANSWERS } from '../Answers/queries';
 
 interface IState {
   contents: string;
@@ -42,30 +44,21 @@ class QuestionInstance extends React.Component<RouteComponentProps<any>, IState>
     }
   }
 
-  public handleMutationUpdate = (cache, { data: { addAnswer }}) => {
-    const questionId = this.props.match.params.id;
-    const { question } = cache.readQuery({ query: GET_ANSWERS, variables: { id: questionId } });
-    const { answers } = question;
-    cache.writeQuery({
-      query: GET_ANSWERS,
-      variables: { id: questionId },
-      data: {
-        question: {
-          ...question,
-          answersLength: question.answersLength + 1,
-          answers: [
-            ...answers,
-            addAnswer
-          ]
-        }
-      }
-    });
-  }
-
   public handleMutationCompleted = () => {
     alert('답변이 성공적으로 등록되었습니다.');
     this.setState({ contents: '' });
   }
+
+  public handleMutationRefetchQueries = () => [
+    {
+      query: GET_QUESTION_BY_QUESTIONS,
+      variables: { offset: 0, limit: 10 }
+    },
+    {
+      query: GET_QUESTION_BY_ANSWERS,
+      variables: { offset: 0, limit: 10, answers: 'none' }
+    }
+  ]
 
   public renderQuestion() {
     const questionId = this.props.match.params.id;
@@ -126,8 +119,8 @@ class QuestionInstance extends React.Component<RouteComponentProps<any>, IState>
     return (
       <Mutation
         mutation={ADD_ANSWER}
-        update={this.handleMutationUpdate}
         onCompleted={this.handleMutationCompleted}
+        refetchQueries={this.handleMutationRefetchQueries}
       >
         {(mutate) => {
           return (
