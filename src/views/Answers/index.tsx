@@ -1,58 +1,93 @@
 import * as React from 'react';
 import styled from '../../styled-components';
 import { Row, Col } from 'antd';
+import { Query, Mutation } from 'react-apollo';
 
 import Navbar from '../../components/Navbar';
 import Container from '../../components/Container';
+import Infinite from '../../components/Infinite';
 import QuestionPanel from '../../components/QuestionPanel';
 
-class Answers extends React.Component {
-  public renderQuestions() {
-    const questions = [
-      {
-        id: '1',
-        question: '오늘은 어떤 하루?',
-        username: '가즈아',
-        date: '11123412341',
-        contents: '비트코인 다시 상승하는 모습 보여주네요 ㅋㅋ 다양한 정보 많이 찾아보시면서 실시간 대응하셔도 좋을듯 제가 공부해보니까 알트는 함부로 가지고 있는다고 답은 아니더라고요',
-        answersLength: 0
-      },
-      {
-        id: '2',
-        question: '오늘은 어떤 하루?',
-        username: '가즈아',
-        date: '11123412341',
-        contents: '비트코인 다시 상승하는 모습 보여주네요 ㅋㅋ 다양한 정보 많이 찾아보시면서 실시간 대응하셔도 좋을듯 제가 공부해보니까 알트는 함부로 가지고 있는다고 답은 아니더라고요',
-        answersLength: 0
-      },
-      {
-        id: '3',
-        question: '오늘은 어떤 하루?',
-        username: '가즈아',
-        date: '11123412341',
-        contents: '비트코인 다시 상승하는 모습 보여주네요 ㅋㅋ 다양한 정보 많이 찾아보시면서 실시간 대응하셔도 좋을듯 제가 공부해보니까 알트는 함부로 가지고 있는다고 답은 아니더라고요',
-        answersLength: 0
-      }
-    ];
-    return (
-      <>
-        {questions.map((item) => {
-          const { id, question, username, date, contents, answersLength } = item;
-          return (
-            <QuestionPanel
-              key={id}
-              id={id}
-              question={question}
-              username={username}
-              date={date}
-              contents={contents}
-              answersLength={answersLength}
-            />
-          );
-        })}
-      </>
-    )
+import {
+  GET_QUESTIONS,
+} from './queries';
+
+interface IState {
+  offset: number;
+  limit: number;
+  fetchedAll: boolean;
+}
+
+class Answers extends React.Component<any, IState> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      offset: 0,
+      limit: 10,
+      fetchedAll: false,
+    }
   }
+
+  public handleInfiniteLoad = (fetchMore, questions) => () => {
+    fetchMore({
+      variables: {
+        offset: questions.length
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) { return prev; }
+        if (fetchMoreResult.questions && fetchMoreResult.questions.length < 10) {
+          this.setState({ fetchedAll: true });
+        }
+        return {
+          ...prev,
+          questions: [ ...prev.questions, ...fetchMoreResult.questions ]
+        }
+      }
+    });
+  }
+
+  public renderQuestions() {
+    const { offset, limit, fetchedAll } = this.state;
+    return (
+      <Query
+        query={GET_QUESTIONS}
+        variables={{ offset, limit, answers: 'none' }}
+        notifyOnNetworkStatusChange={true}
+      >
+        {
+          ({ error, loading, data, refetch, fetchMore }) => {
+            const { questions } = data;
+            if (error) { return null };
+            if (loading && !Boolean(questions)) { return null };
+            return (
+              <Infinite
+                offset={0}
+                loading={loading}
+                fetchedAll={fetchedAll}
+                onLoad={this.handleInfiniteLoad(fetchMore, questions)}
+              >
+                {questions.map((item) => {
+                  const { id, question, contents, answersLength, updatedAt } = item;
+                  return (
+                    <QuestionPanel
+                      key={id}
+                      id={id}
+                      question={question}
+                      username={'Example'}
+                      date={updatedAt}
+                      contents={contents}
+                      answersLength={answersLength}
+                    />
+                  );
+                })}
+              </Infinite>
+            )
+          }
+        }
+      </Query>
+    );
+  }
+
   public render() {
     return (
       <Wrapper>
